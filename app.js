@@ -13,7 +13,7 @@ var express = require('express'),
   db = new Db('moonu', server_config, {}),
   mongoStore = require('connect-mongodb'),
   rest = require('restler'),
-  conf = require('../shared/conf.js');
+  conf = require('../../shared/conf.js');
 
 var app = module.exports = express.createServer();
 
