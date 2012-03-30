@@ -7,12 +7,15 @@ var express = require('express'),
   stylus = require('stylus'),
   mongoose = require('mongoose'),
   everyauth = require('everyauth'),
+  // настройки монго только для сессий
+  // TODO: заменить на redis
   Db = require('mongodb').Db,
   Server = require('mongodb').Server,
   server_config = new Server('10.0.2.51', 27017, {auto_reconnect: true, native_parser: true}),
   db = new Db('moonu', server_config, {}),
   mongoStore = require('connect-mongodb'),
   rest = require('restler'),
+  // appid и client_secret
   conf = require('../../shared/conf.js');
 
 var app = module.exports = express.createServer();
@@ -109,11 +112,13 @@ mongoose.connect('mongodb://10.0.2.51/moonu');
 
 //
 
+// передаем токен из сессии в shistory
 function stdata(req){
   var accessToken = req.session.auth.yandexmoney.accessToken;
   shistory(accessToken,"0",req);
 };
 
+// получаем детали транзакции
 function sdetails(accessToken,op_id,req) {
   op_id.operations.every(function(e) {
       rest.post('https://money.yandex.ru/api/operation-details', {
@@ -154,6 +159,7 @@ function sdetails(accessToken,op_id,req) {
     });
 };
 
+// получаем историю
 function shistory(accessToken,start,req) {
   rest.post('https://money.yandex.ru/api/operation-history', {
     query: {
@@ -200,6 +206,7 @@ app.get('/demo', function(req, res){
   res.render('demo', { title: 'Demo' })
 });
 
+// json для зеленого графика
 app.get('/data/:id/in', function(req, res){
     if (req.loggedIn) {
       var query = Data.find({});
@@ -230,6 +237,7 @@ app.get('/data/:id/in', function(req, res){
     }
 });
 
+// json для красного графика
 app.get('/data/:id/out', function(req, res){
     if (req.loggedIn) {
       var query = Data.find({});
@@ -260,6 +268,7 @@ app.get('/data/:id/out', function(req, res){
     }
 });
 
+// json для правой круговой диаграммы
 app.get('/data/:id/pie/out', function(req, res){
     if (req.loggedIn) {
       var query = Data.find({});
@@ -289,6 +298,7 @@ app.get('/data/:id/pie/out', function(req, res){
     }
 });
 
+// json для левой круговой диаграммы
 app.get('/data/:id/pie/in', function(req, res){
     if (req.loggedIn) {
       var query = Data.find({});
@@ -318,6 +328,7 @@ app.get('/data/:id/pie/in', function(req, res){
     }
 });
 
+// json для правой таблицы
 app.get('/data/:id/table/out', function(req, res){
     if (req.loggedIn) {
       var query = Data.find({});
@@ -338,6 +349,7 @@ app.get('/data/:id/table/out', function(req, res){
     }
 });
 
+// json для левой таблицы
 app.get('/data/:id/table/in', function(req, res){
     if (req.loggedIn) {
       var query = Data.find({});
