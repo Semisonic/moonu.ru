@@ -7,16 +7,10 @@ var express = require('express'),
   stylus = require('stylus'),
   mongoose = require('mongoose'),
   everyauth = require('everyauth'),
-  // настройки монго только для сессий
-  // TODO: заменить на redis
-  Db = require('mongodb').Db,
-  Server = require('mongodb').Server,
-  server_config = new Server('10.0.2.51', 27017, {auto_reconnect: true, native_parser: true}),
-  db = new Db('moonu', server_config, {}),
-  mongoStore = require('connect-mongodb'),
+  RedisStore = require('connect-redis')(express),
   rest = require('restler'),
   // appid и client_secret
-  conf = require('../../shared/conf.js');
+  conf = require('../shared/conf.js');
 
 var app = module.exports = express.createServer();
 
@@ -63,7 +57,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
   app.use(express.cookieParser());
-  app.use(express.session({secret:conf.yandexmoney.secret, store:new mongoStore({db: db}), cookie: {maxAge: 3600000}}));
+  app.use(express.session({secret:conf.yandexmoney.secret, store:new RedisStore({host:'10.0.2.35'}), cookie: {maxAge: 3600000}}));
   app.use(express.methodOverride());
   app.use(everyauth.middleware());
   app.use(stylus.middleware({
