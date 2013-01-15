@@ -1,35 +1,5 @@
-div.container
-  div.row
-    div.span6
-      p.g-bigc Выбор промежутка времени
-    div.span6
-      img(alt="Выбор промежутка времени", src="/img/01.png")
-  div.row
-    div.span8
-      img(alt="Линейный график прихода и расхода", src="/img/02.png")
-    div.span4
-      p.g-bigc Линейный график
-        |<br /> прихода и расхода
-  div.row.b-cfont
-    div.span4
-      a.btn.btn-large.pull-right(href="/auth/yandexmoney")
-        i
-          img(alt="Яндекс.Деньги",src="/img/iconmenu.png")
-        Войти
-    div.span4
-      p.g-cfont или посмотреть демо
-    div.span4
-      a.btn.btn-large.btn-info(href="/demo") Демо
-  div.row
-    div.span4
-      p.g-bigc Круговые диаграммы
-    div.span8
-      img(alt="Круговые диграммы", src="/img/03.png")
-  div.row
-    div.span8
-      img(alt="Таблицы", src="/img/04.png")
-    div.span4
-      p.g-bigc Таблицы
-  div.row
-    div.span12
-      a.pull-right(href="mailto:me@sovechkin.com") Для писем
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}

@@ -1,20 +1,7 @@
-!!! 5
+doctype 5
 html
   head
-    meta(charset="utf-8")
     title= title
-    script(src="/javascripts/jquery-1.7.1.min.js")
-    script(src="/javascripts/d3.v2.min.js")
-    script(src="/javascripts/all.js")
-    link(rel="stylesheet", href="/stylesheets/bootstrap.min.css")
-    link(rel="stylesheet", href="/stylesheets/styles.css")
-    script
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-3260762-23']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-  body!= body
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    block content
