@@ -15,6 +15,7 @@
     "connect-redis": "*",
     "rabbit.js": "*",
     "express-cdn": "*",
-    "toobusy": "*"
+    "toobusy": "*",
+    "nodefly": "stable"
   }
 }
