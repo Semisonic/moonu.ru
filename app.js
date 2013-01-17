@@ -3,7 +3,8 @@
  * Module dependencies.
  */
 
-var express = require('express')
+var toobusy = require('toobusy')
+  , express = require('express')
   , stylus = require('stylus')
   , RedisStore = require('connect-redis')(express)
   , routes = require('./routes')
@@ -14,6 +15,15 @@ var express = require('express')
 var app = module.exports = express();
 
 app.enable('trust proxy');
+
+// middleware which blocks requests when we're too busy
+app.use(function(req, res, next) {
+  if (toobusy()) {
+    res.send(503, "Мы не справляемся с нагрузкой, попробуйте обновить страницу или зайти позже.");
+  } else {
+    next();
+  }
+});
 
 // AppFog
 
@@ -62,4 +72,11 @@ app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
+});
+
+process.on('SIGINT', function() {
+  server.close();
+  // calling .shutdown allows your process to exit normally
+  toobusy.shutdown();
+  process.exit();
 });
