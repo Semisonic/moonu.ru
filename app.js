@@ -44,10 +44,9 @@ if ( process.env.VCAP_SERVICES ) {
 var appfog = JSON.parse(process.env.VMC_APP_INSTANCE);
 require('nodefly').profile(
     process.env.NODEFLY,
-    [APPLICATION_NAME,
+    ['moonu.ru',
      appfog.name,
-     appfog.instance_index],
-     options
+     appfog.instance_index]
 );
 
 // Configuration
