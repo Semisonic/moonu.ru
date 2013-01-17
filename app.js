@@ -39,6 +39,17 @@ if ( process.env.VCAP_SERVICES ) {
   };
 }
 
+// monitoring
+
+var appfog = JSON.parse(process.env.VMC_APP_INSTANCE);
+require('nodefly').profile(
+    process.env.NODEFLY,
+    [APPLICATION_NAME,
+     appfog.name,
+     appfog.instance_index],
+     options
+);
+
 // Configuration
 
 app.configure(function(){
