@@ -4,6 +4,7 @@
  */
 
 var express = require('express')
+  , RedisStore = require('connect-redis')(express)
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
@@ -38,6 +39,8 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser('66TT2ePxnN7mQAio2wdXAoEvX'));
+  app.use(express.session({store: new RedisStore({host:redis['host'], port:redis['port'], pass:redis['password']})}));
   app.use(app.router);
 });
 
