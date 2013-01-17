@@ -4,6 +4,7 @@
  */
 
 var express = require('express')
+  , stylus = require('stylus')
   , RedisStore = require('connect-redis')(express)
   , routes = require('./routes')
   , user = require('./routes/user')
@@ -41,6 +42,14 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.cookieParser('66TT2ePxnN7mQAio2wdXAoEvX'));
   app.use(express.session({store: new RedisStore({host:redis['host'], port:redis['port'], pass:redis['password']})}));
+  app.use(stylus.middleware({
+      src: __dirname + '/styles',
+      dest: __dirname + '/public/stylesheets',
+      compile: function(str, path) {
+          return stylus(str)
+            .set('compress', true);
+      }
+  }));
   app.use(app.router);
 });
 
