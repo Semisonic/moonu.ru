@@ -7,10 +7,12 @@ var toobusy = require('toobusy')
   , express = require('express')
   , stylus = require('stylus')
   , RedisStore = require('connect-redis')(express)
+  , bugsnag = require('bugsnag')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , redis = '';
 
 var app = module.exports = express();
 
@@ -19,7 +21,7 @@ app.enable('trust proxy');
 // middleware which blocks requests when we're too busy
 app.use(function(req, res, next) {
   if (toobusy()) {
-    res.send(503, "Мы не справляемся с нагрузкой, попробуйте обновить страницу или зайти позже.");
+    res.send(503, 'Мы не справляемся с нагрузкой, попробуйте обновить страницу или зайти позже.');
   } else {
     next();
   }
@@ -30,9 +32,9 @@ app.use(function(req, res, next) {
 if ( process.env.VCAP_SERVICES ) {
   var service_type = 'redis-2.2';
   var json = JSON.parse(process.env.VCAP_SERVICES);
-  var redis = json[service_type][0]['credentials'];
+  redis = json[service_type][0]['credentials'];
 } else {
-  var redis = {
+  redis = {
     'host':'10.0.2.35',
     'port':6379,
     'password':''
@@ -55,6 +57,7 @@ app.configure(function(){
   app.set('port', process.env.VCAP_APP_PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.use(bugsnag.register(process.env.BUGSNAG));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.favicon(__dirname + '/public/favicon.ico', { maxAge: 2592000000 }));
   app.use(express.logger('dev'));

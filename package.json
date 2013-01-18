@@ -16,6 +16,7 @@
     "rabbit.js": "*",
     "express-cdn": "*",
     "toobusy": "*",
-    "nodefly": "stable"
+    "nodefly": "stable",
+    "bugsnag": "latest"
   }
 }
