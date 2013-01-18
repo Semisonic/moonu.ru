@@ -12,6 +12,7 @@ var toobusy = require('toobusy')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
+  , semver  = require('semver')
   , redis = '';
 
 var app = module.exports = express();

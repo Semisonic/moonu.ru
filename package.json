@@ -17,6 +17,7 @@
     "express-cdn": "*",
     "toobusy": "*",
     "nodefly": "stable",
-    "bugsnag": "latest"
+    "bugsnag": "latest",
+    "semver": "*"
   }
 }
