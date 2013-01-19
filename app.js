@@ -17,9 +17,8 @@ var toobusy = require('toobusy')
 
 var app = module.exports = express();
 
-app.enable('trust proxy');
-
 // middleware which blocks requests when we're too busy
+
 app.use(function(req, res, next) {
   if (toobusy()) {
     res.send(503, 'Мы не справляемся с нагрузкой, попробуйте обновить страницу или зайти позже.');
@@ -52,12 +51,34 @@ require('nodefly').profile(
      appfog.instance_index]
 );
 
+// Set the CDN options
+
+var options = {
+    publicDir  : path.join(__dirname, '/public')
+  , viewsDir   : path.join(__dirname, '/views')
+  , domain     : 'cdn.moonu.ru'
+  , bucket     : 'moonu'
+  , endpoint   : 'moonu.s3-eu-west-1.amazonaws.com'
+  , key        : process.env.AMAZON_S3_KEY
+  , secret     : process.env.AMAZON_S3_SECRET
+  , hostname   : 'localhost'
+  , port       : 3000
+  , ssl        : false
+  // , production : true
+};
+
+// Initialize the CDN magic
+
+var CDN = require('express-cdn')(app, options);
+
 // Configuration
 
 app.configure(function(){
   app.set('port', process.env.VCAP_APP_PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.enable('view cache');
+  app.enable('trust proxy');
   app.use(bugsnag.register(process.env.BUGSNAG));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.favicon(__dirname + '/public/favicon.ico', { maxAge: 2592000000 }));
@@ -81,10 +102,14 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+// Add the view helper
+
+app.locals({ CDN: CDN() });
+
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
