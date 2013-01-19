@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "moonu.ru",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
     "mongoose": "*",
     "connect-redis": "*",
     "rabbit.js": "*",
-    "express-cdn": "*",
+    "express-cdn": "https://github.com/pomeo/express-cdn/tarball/master",
     "toobusy": "*",
     "nodefly": "stable",
     "bugsnag": "latest",
