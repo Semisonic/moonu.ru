@@ -1,64 +1,153 @@
-extends layout
-
-block content
-  div(class="navbar navbar-inverse navbar-fixed-top")
-    div(class="navbar-inner")
-      div(class="container")
-        a(class="btn btn-navbar", data-toggle="collapse", data-target=".nav-collapse")
-          span(class="icon-bar")
-          span(class="icon-bar")
-          span(class="icon-bar")
-        a(class="brand", href="#") Project name
-        div(class="nav-collapse collapse")
-          ul(class="nav")
-            li(class="active")
-              a(href="#") Home
+doctype 5
+//if lt IE 7
+  <html class="no-js lt-ie9 lt-ie8 lt-ie7">
+//if IE 7
+  <html class="no-js lt-ie9 lt-ie8">
+//if IE 8
+  <html class="no-js lt-ie9">
+// [if gt IE 8] <!
+html(class="no-js")
+  // <![endif]
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+    title= title
+    meta(name="description", content="")
+    meta(content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", name="viewport")
+    meta(content="black", name="apple-mobile-web-app-status-bar-style")
+    != CDN("/css/normalize.min.css")
+    != CDN("/css/font.css")
+    != CDN("/css/main.css")
+    != CDN("/css/flexslider.css")
+    != CDN("/css/sequence_slide.css")
+    != CDN("/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js")
+  body
+    div(id="wrap")
+      //if lt IE 7
+        p(class="chromeframe")Вы используете <strong>устаревший</strong> браузер. Пожалуйста, <a href="http://browsehappy.com/">обновите его</a> или <a href="http://www.google.com/chromeframe/?redirect=true">активируйте Google Chrome Frame</a>.
+      div(class="header-container")
+        header(class="wrapper clearfix")
+          div(id="header")                			
+            a(href="/", class="logo") Moonu.Ru
+            ul(class="menu", id="headnav")
+              li(class="feat")
+                a(href="index.html#") Features
+              li
+                a(href="about.html", target="_self") About
+              li(class="last")
+                a(href="mailto:me@sovechkin.com") Support
+            div(class="prevNext")
+              img(class="prev", src="/img/prev.png", alt="prev")
+              img(class="next", src="/img/next.png", alt="next")
+            div(id="sequence")
+              ul
+                li
+                  h2(class="title animate-in one") Lemon croissant ice cream cotton candy.
+                  div(class="subtitle animate-in one") Caramels sweet gingerbread candy sweet candy canes pie. Sesame snaps jelly beans chocolate cake rocky road croissant candy canes.
+                    h5 Available on
+                    ol
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/apple.png", alt="Apple App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/android.png", alt="Android App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/windows.png", alt="Windows App Store")
+                  img(class="slide one animate-in", src="/img/slide1.png", alt="iPhone 5 in hand")
+                li
+                  img(class="slide twoOne", src="/img/slide2_1.png", alt="iPhone 5's")
+                  img(class="slide twoThree", src="/img/slide2_3.png", alt="iPhone 5's")
+                  img(class="slide twoTwo", src="/img/slide2_2.png", alt="iPhone 5's")
+                li
+                  h2(class="title three") Lemon croissant ice cream cotton candy.
+                  div(class="subtitle three") Caramels sweet gingerbread candy sweet candy canes pie. Sesame snaps jelly beans chocolate cake rocky road croissant candy canes.
+                    h5 Available on
+                    ol
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/apple.png", alt="Apple App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/android.png", alt="Android App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/windows.png", alt="Windows App Store")
+                  img(class="slide three", src="/img/slide3.png", alt="iPhone 5")
+                li
+                  h2(class="title four") Lemon croissant ice cream cotton candy.
+                  div(class="subtitle four") Sweet candy canes pie. Sesame snaps chocolate cake rocky road. Apple cake candy canes wafer croissant candy canes jelly beans gummy bears lollie.
+                    h5 Available on
+                    ol
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/apple.png", alt="Apple App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/android.png", alt="Android App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/windows.png", alt="Windows App Store")
+                  img(class="slide four", src="/img/slide4.png", alt="iPad Mini in hand")
+                li
+                  h2(class="title five") Lemon croissant ice cream cotton candy.
+                  div(class="subtitle five") Sweet candy canes pie. Sesame snaps chocolate cake rocky road. Applecake candy canes wafer croissant candy canes. Gingerbread powder sweet cupcake tootsie roll donuts.
+                    h5 Available on
+                    ol
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/apple.png", alt="Apple App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/android.png", alt="Android App Store")
+                      li
+                        a(href="#Insert Link Here")
+                          img(src="/img/windows.png", alt="Windows App Store")
+                  img(class="slide five", src="/img/slide5.png", alt="iPad Min")
+            ul(id="nav")
+              li
+                span
+              li
+                span
+              li
+                span
+              li
+                span
+              li
+                span
+      div(class="main-container")
+        div(class="main wrapper clearfix")
+          header
+            div(class="flexslider2 quote")
+              ul(class="slides")
+                li “Biscuit chocolate chocolate cake liquorice. Chocolate bar topping bear claw faworki sesame snaps”
+                li “Cupcake caramels sweet. Bear claw cake dragée. Bonbon biscuit pudding cookie wafer bonbon”
+                li “Apple pie tiramisu ginger bread and Marzipan sweet toffee bread roll”
+      div(class="footer-container")
+        footer(class="wrapper clearfix")
+          h1
+            a(href="index.html", class="logofoot") Landahoy
+          ul
             li
-              a(href="#about") About
+              a(href="#Insert Link Here") Pintrest
             li
-              a(href="#contact") Contact
-            li(class="dropdown")
-              a(href="#", class="dropdown-toggle", data-toggle="dropdown") Dropdown&nbsp;
-                b(class="caret")
-              ul(class="dropdown-menu")
-                li
-                  a(href="#") Action
-                li
-                  a(href="#") Another action
-                li
-                  a(href="#") Something else here
-                li(class="divider")
-                li(class="nav-header") Nav header
-                li
-                  a(href="#") Separated link
-                li
-                  a(href="#") One more separated link
-          form(class="navbar-form pull-right")
-            input(class="span2", type="text", placeholder="Email")
-            input(class="span2", type="password", placeholder="Password")
-            button(type="submit", class="btn") Sign in
-  div(class="container")
-    div(class="hero-unit")
-      h1 Welcome to #{title}
-      p This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-      p
-        a(class="btn btn-primary btn-large") Learn more &raquo;
-    div(class="row")
-      div(class="span4")
-        h2 Heading
-        p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-        p
-          a(class="btn", href="#") View details &raquo;
-      div(class="span4")
-        h2 Heading
-        p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-        p
-          a(class="btn", href="#") View details &raquo;
-      div(class="span4")
-        h2 Heading
-        p Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-        p
-          a(class="btn", href="#") View details &raquo;
-    hr
-    footer
-     p &copy; Company 2012
+              a(href="#Insert Link Here") Twitter
+            li
+              a(href="#Insert Link Here") Facebook
+            li
+              a(href="#Insert Link Here") Google Plus
+            li
+              a(href="/about.html") About
+            li
+              a(href="/privacy.html") Privacy
+    != CDN("/js/vendor/jquery-1.9.0.min.js")
+    != CDN("/js/jquery.pagescroller.lite.js")
+    != CDN("/js/jquery.flexslider-min.js")
+    != CDN("/js/sequence.jquery-min.js")
+    != CDN("/js/main.js")
+    script
+      var _gaq=[['_setAccount','UA-3260762-23'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
