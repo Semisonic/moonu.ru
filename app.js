@@ -6,13 +6,12 @@
 var toobusy = require('toobusy')
   , express = require('express')
   , stylus = require('stylus')
+  , everyauth = require('everyauth')
   , RedisStore = require('connect-redis')(express)
   , bugsnag = require('bugsnag')
   , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , semver  = require('semver')
   , redis = '';
 
 var app = module.exports = express();
@@ -71,6 +70,42 @@ var options = {
 
 var CDN = require('express-cdn')(app, options);
 
+// Everyauth
+
+//everyauth.debug = true;
+
+var usersById = {};
+var nextUserId = 0;
+
+function addUser (source, sourceUser) {
+  var user;
+  if (arguments.length === 1) { // password-based
+    user = sourceUser = source;
+    user.id = ++nextUserId;
+    return usersById[nextUserId] = user;
+  } else { // non-password-based
+    user = usersById[++nextUserId] = {id: nextUserId};
+    user[source] = sourceUser;
+  }
+  return user;
+}
+
+var usersByYandexMoney = {};
+
+everyauth.everymodule
+  .findUserById( function (id, callback) {
+    callback(null, usersById[id]);
+  });
+
+everyauth.yandexmoney
+.appId(process.env.YAMONEY_APPID)
+.appSecret(process.env.YAMONEY_APPSECRET)
+.scope("account-info operation-history operation-details")
+.findOrCreateUser( function(session, accessToken, accessTokenExtra, yaUser) {
+    return usersByYandexMoney[yaUser.id] || (usersByYandexMoney[yaUser.id] = addUser('yandexmoney', yaUser));
+  })
+.redirectPath('/');
+
 // Configuration
 
 app.configure(function(){
@@ -85,7 +120,7 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser('66TT2ePxnN7mQAio2wdXAoEvX'));
+  app.use(express.cookieParser(process.env.SECRET));
   app.use(express.session({store: new RedisStore({host:redis['host'], port:redis['port'], pass:redis['password']})}));
   app.use(stylus.middleware({
       src: __dirname + '/styles',
@@ -107,7 +142,7 @@ app.configure('development', function(){
 app.locals({ CDN: CDN() });
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/transactions', routes.list);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
