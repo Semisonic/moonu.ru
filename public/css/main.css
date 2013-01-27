@@ -42,12 +42,12 @@ em{ color: #bec5c8; font-weight: 300; }
 .logo{
 	text-indent: -10000em;
 	position: relative;
-	width: 167px; /* Adjust Width for Logo if needed */
-	height: 39px; /* Adjust Height for Logo if needed */
-	background: url(/img/logo.png) no-repeat center 0; /* Change Your Logo Name */
+	width: 126px;
+	height: 22px;
+	background: url(/img/logo.png) no-repeat center 0;
 	background-size: 100%;
 	margin: 0 auto;
-	top: 30px;
+	top: 47px;
 	left: 0%;
 	z-index: 60;
 	display: block;
@@ -57,10 +57,9 @@ em{ color: #bec5c8; font-weight: 300; }
 	(-webkit-min-device-pixel-ratio: 1.5),
 	(min-device-pixel-ratio: 1.5),
 	(min-resolution: 1.5dppx) {
-	/* on retina, use image that's scaled by 2 */
-.logo{
-	background: url(/img/logo@2x.png) no-repeat 0 0; /* Change Retina Logo */
-}
+  .logo{
+	  background: url(/img/logo@2x.png) no-repeat 0 0;
+  }
 }
 
 
@@ -207,23 +206,23 @@ ul.menu li a:hover{ color: #0ca2d9; } /* Adjust colour of menu links on hover */
    ========================================================================== */ 
 .logofoot {
 	text-indent: -10000em;
-	position: relative;
-	width: 125px; /* Adjust Width for Logo if needed */
-	height: 30px; /* Adjust Height for Logo if needed */
-	background: url(/img/logo_foot.png) no-repeat center 0; /* Change Logo */
+	width: 95px;
+	height: 17px;
+	background: url(/img/logo_foot.png) no-repeat center 0;
 	background-size: 100%;
 	display: block;
 	margin: 0 auto;
+  position: relative;
+  top: 4px;
 }
 @media (min--moz-device-pixel-ratio: 1.5),
 	(-o-min-device-pixel-ratio: 3/2),
 	(-webkit-min-device-pixel-ratio: 1.5),
 	(min-device-pixel-ratio: 1.5),
 	(min-resolution: 1.5dppx) {
-	/* on retina, use image that's scaled by 2 */
-.logofoot {
-	background: url(/img/logo_foot@2x.png) no-repeat 0 0; /*Change Retina Logo */
-}
+  .logofoot {
+	  background: url(/img/logo_foot@2x.png) no-repeat 0 0;
+  }
 }
 
 
@@ -276,7 +275,7 @@ ul.menu li a:hover{ color: #0ca2d9; } /* Adjust colour of menu links on hover */
 	.header-container .wrapper { width: 100%; margin: 0%;  }
 }
 @media only screen and (min-width: 760px) {
-	.logo{ position: absolute; top: 60px; left: 5%; z-index: 1000; }
+	.logo{ position: absolute; top: 73px; left: 5%; z-index: 1000; }
 	ul.menu{ position: absolute; right: 5%; top: 70px; z-index: 1000; }
     .main-container section{ width: 25%; float: left; margin-right: 12%; clear: none; padding-top: 2.2em; }
     .main-container section.last{ margin-right: 0px; }
