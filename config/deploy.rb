@@ -38,4 +38,4 @@ namespace :deploy do
   end
 end
  
-after "deploy:update_code", "deploy:npm_install", "deploy:chg_port", "deploy:restart"
+after "deploy:create_symlink", "deploy:npm_install", "deploy:chg_port", "deploy:restart"

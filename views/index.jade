@@ -15,12 +15,12 @@ html(class="no-js")
     meta(name="description", content="")
     meta(content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", name="viewport")
     meta(content="black", name="apple-mobile-web-app-status-bar-style")
-    != CDN("/css/normalize.min.css")
-    != CDN("/css/font.css")
-    != CDN("/css/main.css")
-    != CDN("/css/flexslider.css")
-    != CDN("/css/sequence_slide.css")
-    != CDN("/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js")
+    link("/css/normalize.min.css")
+    link("/css/font.css")
+    link("/css/main.css")
+    link("/css/flexslider.css")
+    link("/css/sequence_slide.css")
+    script("/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js")
   body
     div(id="wrap")
       //if lt IE 7
@@ -31,11 +31,11 @@ html(class="no-js")
             a(href="/", class="logo") Moonu.Ru
             ul(class="menu", id="headnav")
               li(class="feat")
-                a(href="index.html#") Вход
+                a(href="/login") Вход
               li
-                a(href="about.html", target="_self") Демо
+                a(href="/demo", target="_self") Демо
               li(class="last")
-                a(href="mailto:me@sovechkin.com") Контакты
+                a(href="/contacts") Контакты
             div(class="prevNext")
               img(class="prev", src="/img/prev.png", alt="prev")
               img(class="next", src="/img/next.png", alt="next")
@@ -63,19 +63,17 @@ html(class="no-js")
       div(class="footer-container")
         footer(class="wrapper clearfix")
           h1
-            a(href="index.html", class="logofoot") Moonu
+            a(href="/", class="logofoot") Moonu
           ul
-            li
-              a(href="http://habrahabr.ru/post/") ХабраХабр
             li
               a(href="https://github.com/pomeo/moonu.ru") Github
             li
-              a(href="#contacts") Контакты
-    != CDN("/js/vendor/jquery-1.9.0.min.js")
-    != CDN("/js/jquery.pagescroller.lite.js")
-    != CDN("/js/jquery.flexslider-min.js")
-    != CDN("/js/sequence.jquery-min.js")
-    != CDN("/js/main.js")
+              a(href="/contacts") Контакты
+    script("/js/vendor/jquery-1.9.0.min.js")
+    script("/js/jquery.pagescroller.lite.js")
+    script("/js/jquery.flexslider-min.js")
+    script("/js/sequence.jquery-min.js")
+    script("/js/main.js")
     script
       var _gaq=[['_setAccount','UA-3260762-23'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
