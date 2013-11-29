@@ -52,7 +52,7 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser(process.env.SECRET));
+  app.use(express.cookieParser(process.env.SECRET || '12345'));
   app.use(express.session({store: new RedisStore({host:'redis.robo38.com', port:'6379', pass:''})}));
   app.use(stylus.middleware({
       src: __dirname + '/styles',
@@ -181,7 +181,6 @@ function shistory(accessToken,start,req) {
 
 app.locals({
   rest: rest,
-  context: context,
   shistory: shistory
 });
 
