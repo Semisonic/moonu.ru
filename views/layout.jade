@@ -14,22 +14,22 @@ html(class="no-js")
     title= title
     meta(name="description", content="")
     meta(name="viewport", content="width=device-width")
-    != CDN("/css/bootstrap.min.css")
+    link("/css/bootstrap.min.css")
     style
       body {
         padding-top: 60px;
         padding-bottom: 40px;
       }
-    != CDN("/css/bootstrap-responsive.min.css")
-    != CDN("/css/main.css")
-    != CDN("/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js")
+    link("/css/bootstrap-responsive.min.css")
+    link("/css/main.css")
+    script("/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js")
   body
     //if lt IE 7
       p(class="chromeframe")Вы используете <strong>устаревший</strong> браузер. Пожалуйста, <a href="http://browsehappy.com/">обновите его</a> или <a href="http://www.google.com/chromeframe/?redirect=true">активируйте Google Chrome Frame</a>.
     block content
-    != CDN("/js/vendor/jquery-1.9.0.min.js")
-    != CDN("/js/vendor/bootstrap.min.js")
-    != CDN("/js/main.js")
+    script("/js/vendor/jquery-1.9.0.min.js")
+    script("/js/vendor/bootstrap.min.js")
+    script("/js/main.js")
     script
       var _gaq=[['_setAccount','UA-3260762-23'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];

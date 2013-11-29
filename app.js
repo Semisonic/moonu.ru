@@ -6,15 +6,19 @@
 var toobusy = require('toobusy')
   , express = require('express')
   , stylus = require('stylus')
-  , everyauth = require('everyauth')
+  , mongoose = require('mongoose')
   , RedisStore = require('connect-redis')(express)
+  , rest = require('restler')
   , bugsnag = require('bugsnag')
   , routes = require('./routes')
   , http = require('http')
   , path = require('path')
-  , redis = '';
+  , net = require('net')
+  , redis;
 
 var app = module.exports = express();
+
+// bugsnag.register(process.env.BUGSNAG);
 
 // middleware which blocks requests when we're too busy
 
@@ -26,102 +30,30 @@ app.use(function(req, res, next) {
   }
 });
 
-// AppFog
-
-if ( process.env.VCAP_SERVICES ) {
-  var service_type = 'redis-2.2';
-  var json = JSON.parse(process.env.VCAP_SERVICES);
-  redis = json[service_type][0]['credentials'];
-} else {
-  redis = {
-    'host':'10.0.2.35',
-    'port':6379,
-    'password':''
-  };
-}
-
 // monitoring
 
-var appfog = JSON.parse(process.env.VMC_APP_INSTANCE);
-require('nodefly').profile(
-    process.env.NODEFLY,
-    ['moonu.ru',
-     appfog.name,
-     appfog.instance_index]
-);
-
-// Set the CDN options
-
-var options = {
-    publicDir  : path.join(__dirname, '/public')
-  , viewsDir   : path.join(__dirname, '/views')
-  , domain     : 'cdn.moonu.ru'
-  , bucket     : 'moonu'
-  , endpoint   : 'moonu.s3-eu-west-1.amazonaws.com'
-  , key        : process.env.AMAZON_S3_KEY
-  , secret     : process.env.AMAZON_S3_SECRET
-  , hostname   : 'localhost'
-  , port       : 3000
-  , ssl        : false
-  // , production : true
-};
-
-// Initialize the CDN magic
-
-var CDN = require('express-cdn')(app, options);
-
-// Everyauth
-
-//everyauth.debug = true;
-
-var usersById = {};
-var nextUserId = 0;
-
-function addUser (source, sourceUser) {
-  var user;
-  if (arguments.length === 1) { // password-based
-    user = sourceUser = source;
-    user.id = ++nextUserId;
-    return usersById[nextUserId] = user;
-  } else { // non-password-based
-    user = usersById[++nextUserId] = {id: nextUserId};
-    user[source] = sourceUser;
-  }
-  return user;
-}
-
-var usersByYandexMoney = {};
-
-everyauth.everymodule
-  .findUserById( function (id, callback) {
-    callback(null, usersById[id]);
-  });
-
-everyauth.yandexmoney
-.appId(process.env.YAMONEY_APPID)
-.appSecret(process.env.YAMONEY_APPSECRET)
-.scope("account-info operation-history operation-details")
-.findOrCreateUser( function(session, accessToken, accessTokenExtra, yaUser) {
-    return usersByYandexMoney[yaUser.id] || (usersByYandexMoney[yaUser.id] = addUser('yandexmoney', yaUser));
-  })
-.redirectPath('/');
+// require('nodefly').profile(
+//     process.env.NODEFLY,
+//     ['moonu.ru']
+// );
 
 // Configuration
 
 app.configure(function(){
-  app.set('port', process.env.VCAP_APP_PORT || 3000);
+  app.set('port', 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.enable('view cache');
   app.enable('trust proxy');
-  app.use(bugsnag.register(process.env.BUGSNAG));
+  app.use(bugsnag.requestHandler);
+  app.use(bugsnag.errorHandler);
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.favicon(__dirname + '/public/favicon.ico', { maxAge: 2592000000 }));
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser(process.env.SECRET));
-  app.use(express.session({store: new RedisStore({host:redis['host'], port:redis['port'], pass:redis['password']})}));
+  app.use(express.cookieParser(process.env.SECRET || '12345'));
+  app.use(express.session({store: new RedisStore({host:'redis.robo38.com', port:'6379', pass:''})}));
   app.use(stylus.middleware({
       src: __dirname + '/styles',
       dest: __dirname + '/public/stylesheets',
@@ -137,11 +69,123 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+// MongoDB
+
+var Schema = mongoose.Schema,
+  ObjectId = Schema.ObjectId;
+
+var Account = new Schema({
+  user_id       : String,
+  balance       : String,
+  pub           : Number
+});
+
+var Data = new Schema({
+  user_id       : String,
+  operation_id  : String,
+  pattern_id    : String,
+  datetime      : Date,
+  title         : String,
+  direction     : String,
+  amount        : Number,
+  sender        : String,
+  recipient     : String
+});
+
+Data = mongoose.model('Data', Data);
+
+mongoose.connect('mongodb://mongodb.robo38.com/moonu');
+
+//
+
+function stdata(req){
+  var accessToken = req.session.auth.yandexmoney.accessToken;
+  shistory(accessToken,'0',req);
+};
+
+function shistory(accessToken,start,req) {
+  rest.post('https://money.yandex.ru/api/operation-history', {
+    query: {
+       records: 2,
+       start_record: start
+      },
+    headers: {
+       'authorization': 'Bearer ' + accessToken,
+       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+       'Content-Length': '0'
+      }
+  }).on('success', function (data, res) {
+    console.log(data);
+        // Data.findOne({operation_id: data.operations[0].operation_id}, function(err, mtch) {
+        //     if (!err) {
+        //       if (mtch === null) {
+        //         sdetails(accessToken,data,req);
+        //         if (data.next_record) {
+        //           shistory(accessToken,data.next_record,req);
+        //         } else {
+        //           return data;
+        //         }
+        //       }
+        //     } else {
+        //       res.send("error db");
+        //       console.log(err);
+        //     }
+        //   });
+    }).on('error', function (data, res) {
+        console.log(data);
+    });
+};
+
+// получаем детали транзакции
+// function sdetails(accessToken,op_id,req) {
+//   op_id.operations.every(function(e) {
+//       rest.post('https://money.yandex.ru/api/operation-details', {
+//         query: { operation_id: e.operation_id },
+//             headers: {
+//               'authorization': 'Bearer ' + accessToken,
+//               'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+//               'Content-Length': '0'
+//               }
+//         }).on('success', function (data, res) {
+//             Data.findOne({operation_id: e.operation_id}, function(err, mtch) {
+//                 if (!err) {
+//                   if (mtch === null) {
+//                     var p = data.pattern_id || '';
+//                     var s = data.sender || '';
+//                     var r = data.recipient || '';
+//                     var b = new Data();
+//                     b.set({user_id:req.user.yandexmoney.id, operation_id:data.operation_id, pattern_id:p, datetime:data.datetime, title:data.title, direction:data.direction, amount:data.amount, sender:s, recipient:r});
+//                     b.save(function (err) {
+//                         if (!err) {
+//                           console.log('Success save to db!');
+//                         } else {
+//                           console.log('Error on save! '+err);
+//                         }
+//                       });
+//                     return data;
+//                   }
+//                 } else {
+//                   res.send("error db");
+//                   console.log(err);
+//                 }
+//               });
+//         }).on('error', function (data, res) {
+//             console.log('error api');
+//             console.log(data);
+//         });
+//       return true;
+//     });
+// };
+
 // Add the view helper
 
-app.locals({ CDN: CDN() });
+app.locals({
+  rest: rest,
+  shistory: shistory
+});
 
 app.get('/', routes.index);
+app.get('/demo', routes.demo);
 app.get('/transactions', routes.list);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
